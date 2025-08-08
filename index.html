@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vote Événement</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f0f0;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: #1e1e2f;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      position: relative;
+      z-index: 100;
+    }
+
+    .logo {
+      height: 60px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    #menuButton {
+      font-size: 22px;
+      background: none;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    #menu {
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    #menu ul {
+      list-style: none;
+      margin: 0;
+      padding: 10px 0;
+    }
+
+    #menu ul li {
+      padding: 10px 20px;
+    }
+
+    #menu ul li:hover {
+      background-color: #f2f2f2;
+    }
+
+    #menu ul li a {
+      text-decoration: none;
+      color: #333;
+      cursor: pointer;
+    }
+
+    main {
+      flex: 1;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    section {
+      display: none;
+    }
+
+    section.active {
+      display: block;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin: 30px 0 10px;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      font-size: 20px;
+      color: #777;
+      margin-bottom: 20px;
+    }
+
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .time-segment {
+      background: #000;
+      color: #fff;
+      font-size: 32px;
+      font-weight: bold;
+      padding: 10px 15px;
+      border-radius: 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .time-segment .label {
+      font-size: 12px;
+      margin-top: 5px;
+      color: #ccc;
+    }
+
+    .description {
+      font-size: 16px;
+      max-width: 600px;
+      margin: 0 auto;
+      color: #444;
+      line-height: 1.6;
+    }
+
+    .candidates {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .candidate {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      width: 280px;
+      transition: transform 0.3s ease;
+    }
+
+    .candidate:hover {
+      transform: scale(1.05);
+    }
+
+    .candidate img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .candidate h3 {
+      margin: 10px 0;
+    }
+
+    .vote-buttons {
+      margin: 15px 0;
+    }
+
+    .vote-buttons button {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .vote-yes {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .vote-no {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .results {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .info-box {
+      background: white;
+      padding: 30px;
+      max-width: 600px;
+      margin: 40px auto;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    footer {
+      background-color: #1e1e2f;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="images/img2.jpeg" alt="Logo" class="logo" />
+    <button id="menuButton">☰</button>
+    <nav id="menu">
+      <ul>
+        <li><a onclick="showSection('accueil')">Accueil</a></li>
+        <li><a onclick="showSection('apropos')">À propos</a></li>
+        <li><a onclick="showSection('information')">Information</a></li>
+        <li><a onclick="showSection('contacts')">Contacts</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Section Accueil -->
+    <section id="accueil" class="active">
+      <h1>Vote officiel</h1>
+      <p class="subtitle">Les votes seront désactivés dans :</p>
+      <div class="countdown">
+        <div class="time-segment"><span id="days">00</span><div class="label">Jour.s</div></div>
+        <div class="time-segment"><span id="hours">00</span><div class="label">Heure.s</div></div>
+        <div class="time-segment"><span id="minutes">00</span><div class="label">Minute.s</div></div>
+        <div class="time-segment"><span id="seconds">00</span><div class="label">Seconde.s</div></div>
+      </div>
+      <p class="description">
+        Les votes se clôturent à la fin du compte à rebours, chaque vote compte. <strong>Votez OUI pour soutenir Denis SASSOU NGUESSO, ou NON pour le voir partir !</strong>
+      </p>
+
+      <div class="candidates">
+        <!-- Candidat 1 -->
+        <div class="candidate" id="cand1">
+          <img src="images/bg1.jpeg" alt="Candidat 1" />
+          <h3>Denis SASSOU NGUESSO</h3>
+          <div class="vote-buttons">
+            <button class="vote-yes" onclick="vote('yes', 1)" id="voteYesBtn">Je vote Oui</button>
+            <button class="vote-no" onclick="vote('no', 1)" id="voteNoBtn">Je vote Non</button>
+          </div>
+          <div class="results">Oui: <span id="yesVotes1">00</span> | Non: <span id="noVotes1">00</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section À propos -->
+    <section id="apropos">
+      <div class="info-box">
+        <h2>À propos de nous</h2>
+        <p>Ce projet est un appel à la justice. Nous demandons un changement, un avenir. Un vote pour un meilleur avenir. Parce que ça ne peut plus durer.</p>
+      </div>
+    </section>
+
+    <!-- Section information -->
+    <section id="information">
+      <div class="info-box">
+        <h2>Information</h2>
+        <p><strong>Qui est Denis SASSOU NGUESSO ?</strong> Un homme politique congolais en poste depuis plus de 40 ans.</p>
+      </div>
+    </section>
+
+    <!-- Section Contacts -->
+    <section id="contacts">
+      <div class="info-box">
+        <h2>Contacts</h2>
+        <p><strong>Email :</strong> votecongo@gmail.com</p>
+        <p><strong>Téléphone :</strong> +242 06 410 88 53</p>
+        <p><strong>WhatsApp :</strong> +242 06 410 88 53</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 Cvote - Tous droits réservés par ANGELO NGOKA.
+  </footer>
+
+  <script>
+    // Menu toggle
+    document.getElementById("menuButton").onclick = () => {
+      const menu = document.getElementById("menu");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    };
+
+    // Navigation
+    function showSection(id) {
+      document.querySelectorAll("main section").forEach(sec => sec.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+      document.getElementById("menu").style.display = "none";
+    }
+
+    // Compte à rebours
+    function updateCountdown() {
+      const now = new Date();
+      const target = new Date();
+      target.setHours(23, 59, 59, 999);
+      if (now > target) target.setDate(target.getDate() + 1);
+      const diff = target - now;
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      document.getElementById("days").textContent = String(days).padStart(2, "0");
+      document.getElementById("hours").textContent = String(hours).padStart(2, "0");
+      document.getElementById("minutes").textContent = String(minutes).padStart(2, "0");
+      document.getElementById("seconds").textContent = String(seconds).padStart(2, "0");
+
+      setTimeout(updateCountdown, 1000);
+    }
+    updateCountdown();
+
+    // Vérifier si l'utilisateur a déjà voté
+    function hasVoted() {
+      return localStorage.getItem('hasVoted') === 'true';
+    }
+
+    // Fonction de vote
+    let votes = { yes: 0, no: 0 };
+
+    function vote(choice, candidateId) {
+      if (hasVoted()) {
+        alert("Vous avez déjà voté !");
+        return;
+      }
+
+      if (candidateId === 1) {
+        if (choice === 'yes') votes.yes++;
+        else if (choice === 'no') votes.no++;
+
+        document.getElementById(`yesVotes1`).textContent = votes.yes;
+        document.getElementById(`noVotes1`).textContent = votes.no;
+      }
+
+      // Enregistrer que l'utilisateur a voté
+      localStorage.setItem('hasVoted', 'true');
+    }
+  </script>
+</body>
+</html>
