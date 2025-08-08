@@ -260,6 +260,58 @@
       padding: 1.5rem;
       margin-top: 2rem;
     }
+
+    /* --- RESPONSIVE DESIGN --- */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+      .subtitle {
+        font-size: 1.1rem;
+      }
+      .candidate {
+        width: 280px;
+      }
+      .time-segment {
+        min-width: 90px;
+        font-size: 2rem;
+        padding: 0.8rem 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding: 1rem;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+      .subtitle {
+        font-size: 1rem;
+      }
+      .countdown {
+        gap: 0.5rem;
+      }
+      .time-segment {
+        min-width: 70px;
+        font-size: 1.5rem;
+        padding: 0.8rem 0.5rem;
+      }
+      .time-segment .label {
+        font-size: 0.6rem;
+      }
+      .candidate {
+        width: 100%;
+        max-width: 300px;
+        padding: 1rem;
+      }
+      .vote-buttons {
+        flex-direction: column;
+      }
+      .info-box {
+        padding: 1.5rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -344,7 +396,7 @@
     // --- CONFIGURATION SUPABASE ---
     const SUPABASE_URL = 'https://bsrkenbhryypoopzhjjv.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzcmtlbmJocnl5cG9vcHpoamp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2NzU3MjEsImV4cCI6MjA3MDI1MTcyMX0.M5nYtwioasT4zqIqRT7h5181zB93DiqEby66pVagsck';
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     // --- INTERFACE UTILISATEUR ---
     document.getElementById("menuButton").onclick = () => {
